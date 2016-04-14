@@ -18,7 +18,6 @@ puts "                                       | |                   "
 puts "                                       |_|                   "
 puts "                                                             "
 
-
 # Print today's date
 puts "Today's date is April 14, 2016"
 
@@ -30,6 +29,7 @@ puts " |  ___/ '__/ _ \\ / _` | | | |/ __| __/ __|"
 puts " | |   | | | (_) | (_| | |_| | (__| |_\\__ \\"
 puts " |_|   |_|  \\___/ \\__,_|\\__,_|\\___|\\__|___/"
 puts "                                            "
+
 
 # For each product in the data set:
 	# Print the name of the toy
