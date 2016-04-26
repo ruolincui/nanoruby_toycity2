@@ -33,6 +33,14 @@ puts "                                            "
 
 # For each product in the data set:
 	# Print the name of the toy
+def print_name(hash)
+	hash["items"].each do |toy|
+		puts toy['title']
+	end
+end
+print_name($products_hash)
+
+
 	# Print the retail price of the toy
 	# Calculate and print the total number of purchases
 	# Calculate and print the total amount of sales
