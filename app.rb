@@ -12,50 +12,66 @@ def setup_files
     $report_file = File.new("report.txt", "w+")
 end
 
-def print_heading(heading)
-	#blablabla
-end
 
 # Print "Sales Report" in ascii art
-puts "                                                             "
-puts "   _____       _             _____                       _   "
-puts "  / ____|     | |           |  __ \\                     | | "
-puts " | (___   __ _| | ___  ___  | |__) |___ _ __   ___  _ __| |_ "
-puts "  \\___ \\ / _` | |/ _ \\/ __| |  _  // _ \\ '_ \\ / _ \\| '__| __|"
-puts "  ____) | (_| | |  __/\\__ \\ | | \\ \\  __/ |_) | (_) | |  | |_ "
-puts " |_____/ \\__,_|_|\\___||___/ |_|  \\_\\___| .__/ \\___/|_|   \\__|"
-puts "                                       | |                   "
-puts "                                       |_|                   "
-puts "                                                             "
+def print_ascii_report
+	puts "                                                             "
+	puts "   _____       _             _____                       _   "
+	puts "  / ____|     | |           |  __ \\                     | | "
+	puts " | (___   __ _| | ___  ___  | |__) |___ _ __   ___  _ __| |_ "
+	puts "  \\___ \\ / _` | |/ _ \\/ __| |  _  // _ \\ '_ \\ / _ \\| '__| __|"
+	puts "  ____) | (_| | |  __/\\__ \\ | | \\ \\  __/ |_) | (_) | |  | |_ "
+	puts " |_____/ \\__,_|_|\\___||___/ |_|  \\_\\___| .__/ \\___/|_|   \\__|"
+	puts "                                       | |                   "
+	puts "                                       |_|                   "
+	puts "                                                             "
+end
 
 # Print today's date
-
+def print_date
+	return Time.now.strftime("%m/%d/%y")
+end
 
 # Print "Products" in ascii art
-puts "  _____               _            _        "
-puts " |  __ \\             | |          | |      "
-puts " | |__) | __ ___   __| |_   _  ___| |_ ___  "
-puts " |  ___/ '__/ _ \\ / _` | | | |/ __| __/ __|"
-puts " | |   | | | (_) | (_| | |_| | (__| |_\\__ \\"
-puts " |_|   |_|  \\___/ \\__,_|\\__,_|\\___|\\__|___/"
-puts "                                            "
+def print_ascii_products
+	puts "  _____               _            _        "
+	puts " |  __ \\             | |          | |      "
+	puts " | |__) | __ ___   __| |_   _  ___| |_ ___  "
+	puts " |  ___/ '__/ _ \\ / _` | | | |/ __| __/ __|"
+	puts " | |   | | | (_) | (_| | |_| | (__| |_\\__ \\"
+	puts " |_|   |_|  \\___/ \\__,_|\\__,_|\\___|\\__|___/"
+	puts "                                            "
+end
 
 def create_report	
-	#print_heading("Sales Report")
-	puts "Today's date is #{Time.now.strftime("%m/%d/%y")}"
-	#print_heading("Products")
+	print_ascii_report
+	puts "Today's date is #{print_date}"
+	puts ""
+	print_ascii_products
 	$products_hash["items"].each do |toy|
 		puts "#{get_title(toy)}"
+		puts "***********************************"
 		puts "Retail Price: $#{get_retail_price(toy)}"
 		puts "Total Purchases: #{get_total_purchases(toy)}"
 		puts "Total Sales: $#{get_total_sales(toy)}"
 		puts "Average Price: $#{get_average_price(toy)}"
 		puts "Average Discount: $#{get_average_discount(toy)}"
-		puts "***********************************"
 		puts ""
 	end
-	#print_heading("Brands")
-
+	print_ascii_brand
+	get_uniq_brand
+	/
+	$unique_brand.each do |brand|
+		puts "***********************************"
+		$brands_hash = $products_hash['items'].select{ |toy| toy['brand'] == brand}
+		$brands_hash.each do |item|
+			puts "Total Stock of #{brand}: #{get_brand_stock(item)}"
+			puts "Average Price of #{brand}: $#{get_average_price_brand(item)}"
+			puts "Total Revenue of #{brand}: $#{get_revenue_brand(item)}"
+			puts ""
+		end
+	end
+	/
 end
 
 
@@ -78,11 +94,11 @@ end
 
 	# Calculate and print the total amount of sales
 def get_total_sales(toy)
-	total = 0
+	total_sales = 0
 	toy['purchases'].each do |purchase|
-		total += purchase['price']
+		total_sales += purchase['price']
 	end
-	return total
+	return total_sales
 end
 
 	# Calculate and print the average price the toy sold for
@@ -96,20 +112,49 @@ def get_average_discount(toy)
 end
 
 # Print "Brands" in ascii art
-puts "  ____                      _      "
-puts " |  _ \\                    | |    "
-puts " | |_) |_ __ __ _ _ __   __| |___  "
-puts " |  _ <| '__/ _` | '_ \\ / _` / __| "
-puts " | |_) | | | (_| | | | | (_| \\__ \\"
-puts " |____/|_|  \\__,_|_| |_|\\__,_|___/"
-puts "                                   "
+def print_ascii_brand
+	puts "  ____                      _      "
+	puts " |  _ \\                    | |    "
+	puts " | |_) |_ __ __ _ _ __   __| |___  "
+	puts " |  _ <| '__/ _` | '_ \\ / _` / __| "
+	puts " | |_) | | | (_| | | | | (_| \\__ \\"
+	puts " |____/|_|  \\__,_|_| |_|\\__,_|___/"
+	puts "                                   "
+end
                                   
                                   
 # For each brand in the data set:
 	# Print the name of the brand
+def get_uniq_brand(toy)
+	$unique_brand = $products_hash['items'].map{ |item| item['brand'] }.uniq
+	return $unique_brand
+end
+
 	# Count and print the number of the brand's toys we stock
+def get_brand_stock(item)
+	total_stock_brand = 0
+	total_stock_brand += item['stock']
+	return total_stock_brand
+end
+
 	# Calculate and print the average price of the brand's toys
+def get_average_price_brand(item)
+	total_price_brand = 0
+    average_price_brand = 0
+    total_price_brand += item['full-price'].to_f
+    average_price_brand = (total_price_brand / $brands_hash.length).round(2)
+    return average_price_brand
+end
+
 	# Calculate and print the total sales volume of all the brand's toys combined
+def get_revenue_brand(item)
+	total_revenue_brand = 0
+	item['purchases'].each do |purchase|
+		total_revenue_brand += purchase['price']
+	end
+	return total_revenue_brand
+end
+
 
 
 
