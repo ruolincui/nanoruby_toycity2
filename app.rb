@@ -1,9 +1,4 @@
 require 'json'
-def start
-	setup_files
-	create_report
-end
-
 
 def setup_files
     path = File.join(File.dirname(__FILE__), '../data/products.json')
@@ -12,6 +7,12 @@ def setup_files
     $report_file = File.new("report.txt", "w+")
 end
 
+def start
+	setup_files
+	File.open("report.txt", "w+") do |line|
+		line.puts create_report
+	end
+end
 
 # Print "Sales Report" in ascii art
 def print_ascii_report
@@ -43,7 +44,7 @@ def print_ascii_products
 	puts "                                            "
 end
 
-def create_report	
+def create_report
 	print_ascii_report
 	puts "Today's date is #{print_date}"
 	puts ""
@@ -75,8 +76,8 @@ end
 
 # For each product in the data set:
 	# Print the name of the toy
-def get_title(x)
-	return x['title']
+def get_title(toy = {})
+	return toy['title']
 end
 
 	# Print the retail price of the toy
